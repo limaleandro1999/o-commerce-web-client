@@ -1,33 +1,76 @@
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-import '../styles/navbar.css';
 import logo from '../images/cuttedLogo.png';
 import profilePhoto from '../images/profilePhoto.png';
-import 'bootstrap/dist/css/bootstrap.css';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import Button from 'react-bootstrap/Button';
+import Login from '../screens/Login';
 
-export default class Navbar extends Component {
+import 'bootstrap/dist/css/bootstrap.css';
+import '../styles/navbar.css';
+
+export default class MainNavbar extends Component {
   state = {
     search: '',
-    profilePhoto: ''
+    profilePhoto: '',
+    modalVisibility: false
   };
-
+  
   handleInputChange = e => {
     this.setState({ search: e.target.value });
   };
 
+  handleClickButton = () => {
+    alert('clicado');
+  };
+
+  handleClickHome = () => {
+    this.props.history.push('/');
+  };
+
+  handleShowModal = () => {
+    this.setState({ modalVisibility: !this.state.modalVisibility });
+  };
+
   render() {
     return (
-      <nav className="navbar topnav navbar-light bg-light">
-          <div className="logo navbar-brand nav-item">
-            <img src={logo} alt="alt"/>
-          </div>
-          <form className="form-inline">
-            <input type="text" placeholder="Buscar" className="searchInput form-control mr-sm-2" value={this.state.search} onChange={this.handleInputChange}/>
-          </form>
-          <div className="nav-item my-2 my-sm-0">
-            <img src={this.state.profilePhoto.length > 0 ? this.state.profilePhoto : profilePhoto} className="rounded-circle userPhoto" alt="alt"/>
-          </div>
-      </nav>
+      <>
+        <Login 
+          visibility={this.state.modalVisibility}
+          handleShowModal={this.handleShowModal}
+          history={this.props.history}
+        />
+        <Navbar bg="light" expand="lg" className="topnav">
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Brand>
+            <img onClick={this.handleClickHome} src={logo} alt="alt"/>
+          </Navbar.Brand>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              <Form inline>
+                <FormControl type="text" placeholder="Buscar" value={this.state.search} onChange={this.handleInputChange} className="searchInput mr-sm-2" />
+                <Button onClick={this.handleClickButton}>Buscar</Button>
+              </Form>
+            </Nav>
+            <Nav>
+              <Nav.Link>
+                <FontAwesomeIcon icon={faShoppingCart} size="lg"/>
+              </Nav.Link>
+              <Nav.Link onClick={this.handleShowModal}>
+                <div className="loginText">
+                  <p className="text">Faça o login, ou cadastre-se agora!</p>
+                </div>
+              </Nav.Link>
+              <img src={this.state.profilePhoto.length > 0 ? this.state.profilePhoto : profilePhoto} className="rounded-circle userPhoto" alt="alt"/>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+      </>
     );
   }
 }
