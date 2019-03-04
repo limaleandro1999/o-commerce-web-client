@@ -22,3 +22,8 @@
 .loginText .text {
     font-size: 11px;
 }
+
+.loginText .username {
+    padding-top: 10px; 
+    font-size: 14px;
+}

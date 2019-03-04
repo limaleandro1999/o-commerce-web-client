@@ -20,7 +20,15 @@ export default class MainNavbar extends Component {
     profilePhoto: '',
     modalVisibility: false
   };
-  
+
+  componentDidMount(){
+    const username = localStorage.getItem('@O-Commerce:name');
+    console.log(username);
+    if(username){
+      this.setState({ username: username });
+    }
+  }
+
   handleInputChange = e => {
     this.setState({ search: e.target.value });
   };
@@ -61,11 +69,18 @@ export default class MainNavbar extends Component {
               <Nav.Link>
                 <FontAwesomeIcon icon={faShoppingCart} size="lg"/>
               </Nav.Link>
-              <Nav.Link onClick={this.handleShowModal}>
-                <div className="loginText">
-                  <p className="text">Faça o login, ou cadastre-se agora!</p>
-                </div>
-              </Nav.Link>
+              {
+                this.state.username 
+                ? <div className="loginText">
+                    <p className="username">{this.state.username}</p>
+                  </div>
+                : <Nav.Link onClick={this.handleShowModal}>
+                    <div className="loginText">
+                      <p className="text">Faça o login, ou cadastre-se agora!</p>
+                    </div>
+                  </Nav.Link>
+              }
+              
               <img src={this.state.profilePhoto.length > 0 ? this.state.profilePhoto : profilePhoto} className="rounded-circle userPhoto" alt="alt"/>
             </Nav>
           </Navbar.Collapse>

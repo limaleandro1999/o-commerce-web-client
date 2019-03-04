@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 import Navbar from '../components/Navbar';
 import Form from 'react-bootstrap/Form';
@@ -8,8 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
+
+import api from '../services/api'
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/newUser.css';
@@ -19,7 +18,7 @@ export default class NewUser extends Component {
     email: '',
     password: '',
     name: '',
-    isComprador: ''
+    isBuyer: ''
   };
 
   handleInputChange = e => {
@@ -27,7 +26,13 @@ export default class NewUser extends Component {
   };
 
   handleSubmit = () => {
-    console.log(this.state);
+    console.log('clicado')
+    api.post('/users', this.state).then(res => {
+      console.log(res.data);
+    }).catch(error => {
+      console.log(error)
+      alert('Veja o console de desenvolvedor');
+    });
   };
 
   render() {
@@ -61,14 +66,14 @@ export default class NewUser extends Component {
                           <Form.Check
                             type="radio"
                             label="Comprador"
-                            name="isComprador"
+                            name="isBuyer"
                             onChange={this.handleInputChange}
                             value={true}
                           />
                           <Form.Check
                             type="radio"
                             label="Vendedor"
-                            name="isComprador"
+                            name="isBuyer"
                             onChange={this.handleInputChange}
                             value={false}
                           />
@@ -77,9 +82,9 @@ export default class NewUser extends Component {
                     </fieldset>
                   </Col>
                   {
-                    this.state.isComprador !== ''
+                    this.state.isBuyer !== ''
                     ? 
-                      this.state.isComprador === "true"
+                      this.state.isBuyer === "true"
                       ? <Col sm={12} md={6}>
                           <Form.Label>CPF</Form.Label>
                           <Form.Control type="text" name="cpf" value={this.state.cpf} onChange={this.handleInputChange}/>
