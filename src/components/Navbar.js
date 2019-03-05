@@ -11,6 +11,8 @@ import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import Login from '../screens/Login';
 
+import api from '../services/api'
+
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/navbar.css';
 
@@ -23,7 +25,6 @@ export default class MainNavbar extends Component {
 
   componentDidMount(){
     const username = localStorage.getItem('@O-Commerce:name');
-    console.log(username);
     if(username){
       this.setState({ username: username });
     }
@@ -34,7 +35,13 @@ export default class MainNavbar extends Component {
   };
 
   handleClickButton = () => {
-    alert('clicado');
+    api.get(`/products`, {
+      params: {
+        q: this.state.search
+      }
+    }).then(res => {
+      console.log(res.data);
+    })
   };
 
   handleClickHome = () => {

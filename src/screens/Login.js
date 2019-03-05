@@ -25,11 +25,16 @@ export default class Login extends Component {
 
   handleLogin = () => {
     api.post('/users/authenticate', this.state).then(res => {
-      console.log(res.data);
       localStorage.setItem('@O-Commerce:accessToken', res.data.accessToken);
       localStorage.setItem('@O-Commerce:email', res.data.email);
       localStorage.setItem('@O-Commerce:name', res.data.name);
-      localStorage.setItem('@O-Commerce:isBuyer', res.data.isBuyes);
+      localStorage.setItem('@O-Commerce:isBuyer', res.data.isBuyer);
+
+      if(res.data.isBuyer){
+        this.props.history.push('/');
+      }else{
+        this.props.history.push('/dashboard');
+      }
     }).catch(error => {
       console.log(error);
     });
