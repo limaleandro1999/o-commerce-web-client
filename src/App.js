@@ -7,6 +7,7 @@ import Dashboard from './screens/Dashboard'
 import ProductList from './screens/ProductsList';
 import NewProduct from './screens/NewProduct';
 import EditProduct from './screens/EditProduct';
+import ProductListHome from './screens/ProductsListHome';
 
 import './App.css';
 
@@ -22,6 +23,7 @@ class App extends Component {
           <Route path="/produtos" component={ProductList}/>
           <Route path="/cadastrar_produto" component={NewProduct}/>
           <Route path="/editar_produto" component={EditProduct}/>
+          <Route path="/lista_produtos" component={ProductListHome}/>
         </Switch>
       </BrowserRouter>
     );

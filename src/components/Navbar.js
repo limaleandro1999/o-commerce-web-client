@@ -35,12 +35,16 @@ export default class MainNavbar extends Component {
   };
 
   handleClickButton = () => {
-    api.get(`/products`, {
+    api.get(`/products/list`, {
       params: {
         q: this.state.search
       }
     }).then(res => {
-      console.log(res.data);
+      if(this.props.history.location.pathname === '/lista_produtos'){
+        this.props.history.push({pathname: '/lista_produtos', search: `?q=${this.state.search}`, state: {products: res.data} });
+      }else{
+        this.props.history.push('/lista_produtos', { products: res.data });
+      }
     })
   };
 

@@ -22,8 +22,7 @@ export default class ProductItem extends Component {
                     <Col>
                         <p>R$ {this.props.product.price}</p>
                         
-                        <Button style={{ marginRight: 7 + 'px' }} onClick={() => this.props.handleEdit(this.props.product._id)} variant="outline-warning">Editar</Button>
-                        <Button onClick={() => this.props.handleDelete(this.props.product._id, this.props.index)} variant="outline-danger">Deletar</Button>
+                        {this.props.children}
                     </Col>
                 </Row>
             </Card.Body>

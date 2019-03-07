@@ -61,7 +61,12 @@ export default class ProductList extends Component {
                         <Card.Body>
                             {
                                 this.state.products.map((product, index) => {
-                                    return (<ProductItem key={index} index={index} handleDelete={this.handleDeleteProduct} handleEdit={this.handleEditProduct} product={product}/>)
+                                    return (
+                                        <ProductItem key={index} index={index} handleDelete={this.handleDeleteProduct} handleEdit={this.handleEditProduct} product={product}>
+                                            <Button style={{ marginRight: 7 + 'px' }} onClick={() => this.props.handleEdit(this.props.product._id)} variant="outline-warning">Editar</Button>
+                                            <Button onClick={() => this.props.handleDelete(this.props.product._id, this.props.index)} variant="outline-danger">Deletar</Button>
+                                        </ProductItem>
+                                    )
                                 })
                             }
                         </Card.Body>
