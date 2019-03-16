@@ -22,12 +22,17 @@ export default class NewUser extends Component {
   };
 
   handleInputChange = e => {
+    if(e.target.name === 'isBuyer'){
+      this.setState({ cpf: '', phone: '', cep: '', address: '', cnpj: '' });
+    }
+
     this.setState({ [e.target.name]: e.target.value });
   };
 
   handleSubmit = () => {
-    console.log('clicado')
     api.post('/users', this.state).then(res => {
+      alert('Sucesso, agora você pode fazer seu login!');
+      this.props.history.push('/');
       console.log(res.data);
     }).catch(error => {
       console.log(error)
@@ -48,14 +53,20 @@ export default class NewUser extends Component {
               <Form>
                 <Row>
                   <Col sm={12} md={6}>
-                    <Form.Label>Nome</Form.Label>
-                    <Form.Control type="text" name="name" value={this.state.name} onChange={this.handleInputChange}/>
-
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" name="email" value={this.state.email} onChange={this.handleInputChange}/>
-
-                    <Form.Label>Senha</Form.Label>
-                    <Form.Control type="password" name="password" value={this.state.password} onChange={this.handleInputChange}/>
+                    <Form.Group>
+                      <Form.Label>Nome</Form.Label>
+                      <Form.Control type="text" name="name" value={this.state.name} onChange={this.handleInputChange}/>
+                    </Form.Group>
+                    
+                    <Form.Group>
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control type="email" name="email" value={this.state.email} onChange={this.handleInputChange}/>
+                    </Form.Group>
+                    
+                    <Form.Group>
+                      <Form.Label>Senha</Form.Label>
+                      <Form.Control type="password" name="password" value={this.state.password} onChange={this.handleInputChange}/>
+                    </Form.Group>
 
                     <fieldset>
                       <Form.Group as={Row}>
@@ -86,30 +97,48 @@ export default class NewUser extends Component {
                     ? 
                       this.state.isBuyer === "true"
                       ? <Col sm={12} md={6}>
-                          <Form.Label>CPF</Form.Label>
-                          <Form.Control type="text" name="cpf" value={this.state.cpf} onChange={this.handleInputChange}/>
+                          <Form.Group>
+                            <Form.Label>CPF</Form.Label>
+                            <Form.Control type="text" name="cpf" value={this.state.cpf} onChange={this.handleInputChange}/>
+                          </Form.Group>
+                          
+                          <Form.Group>
+                            <Form.Label>Telefone</Form.Label>
+                            <Form.Control type="text" name="phone" value={this.state.phone} onChange={this.handleInputChange}/>
+                          </Form.Group>
+                          
+                          <Form.Group>
+                            <Form.Label>CEP</Form.Label>
+                            <Form.Control type="text" name="cep" value={this.state.cep} onChange={this.handleInputChange}/>
+                          </Form.Group>
 
-                          <Form.Label>Telefone</Form.Label>
-                          <Form.Control type="text" name="phone" value={this.state.phone} onChange={this.handleInputChange}/>
+                          <Form.Group>
+                            <Form.Label>Endereço</Form.Label>
+                            <Form.Control type="text" name="address" value={this.state.address} onChange={this.handleInputChange}/>
+                          </Form.Group>
 
-                          <Form.Label>CEP</Form.Label>
-                          <Form.Control type="text" name="cep" value={this.state.cep} onChange={this.handleInputChange}/>
-
-                          <Form.Label>Endereço</Form.Label>
-                          <Form.Control type="text" name="address" value={this.state.address} onChange={this.handleInputChange}/>
-                          <Button onClick={this.handleSubmit}>
-                            Cadastrar
-                          </Button>
+                          <Form.Group>
+                            <Button onClick={this.handleSubmit}>
+                              Cadastrar
+                            </Button>
+                          </Form.Group>                    
                         </Col>
                       : <Col sm={12} md={6}>
-                          <Form.Label>CNPJ</Form.Label>
-                          <Form.Control type="text" name="cnpj" value={this.state.cnpj} onChange={this.handleInputChange}/>
-
-                          <Form.Label>Telefone</Form.Label>
-                          <Form.Control type="text" name="phone" value={this.state.phone} onChange={this.handleInputChange}/>
-                          <Button onClick={this.handleSubmit}>
-                            Cadastrar
-                          </Button>
+                          <Form.Group>
+                            <Form.Label>CNPJ</Form.Label>
+                            <Form.Control type="text" name="cnpj" value={this.state.cnpj} onChange={this.handleInputChange}/>  
+                          </Form.Group>
+                          
+                          <Form.Group>
+                            <Form.Label>Telefone</Form.Label>
+                            <Form.Control type="text" name="phone" value={this.state.phone} onChange={this.handleInputChange}/>
+                          </Form.Group>
+                          
+                          <Form.Group>
+                            <Button onClick={this.handleSubmit}>
+                              Cadastrar
+                            </Button>
+                          </Form.Group>
                         </Col>
                     : <div/>
                   }

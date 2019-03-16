@@ -15,10 +15,21 @@ export default class ProductList extends Component {
         products: []
     };
 
+    componentWillMount(){
+        const isBuyer = localStorage.getItem('@O-Commerce:isBuyer');
+        const token = localStorage.getItem('@O-Commerce:accessToken');
+        
+        if((isBuyer === 'true' && token) || !token){
+            alert('Você precisa está logado e ter uma conta Vendedor para acessar esta página!');
+            this.props.history.push('/');
+    
+        }
+    }
+
     async componentDidMount(){
         const responseProducts = await api.get('/products', {headers: {'Authorization': `Bearer ${localStorage.getItem('@O-Commerce:accessToken')}`}});
         this.setState({ products: responseProducts.data });
-    };
+    }
 
     handleClickNewProduct = () => {
         this.props.history.push('/cadastrar_produto');
@@ -62,9 +73,9 @@ export default class ProductList extends Component {
                             {
                                 this.state.products.map((product, index) => {
                                     return (
-                                        <ProductItem key={index} index={index} handleDelete={this.handleDeleteProduct} handleEdit={this.handleEditProduct} product={product}>
-                                            <Button style={{ marginRight: 7 + 'px' }} onClick={() => this.props.handleEdit(this.props.product._id)} variant="outline-warning">Editar</Button>
-                                            <Button onClick={() => this.props.handleDelete(this.props.product._id, this.props.index)} variant="outline-danger">Deletar</Button>
+                                        <ProductItem key={index} index={index} product={product}>
+                                            <Button style={{ marginRight: 7 + 'px' }} onClick={() => this.handleEditProduct(product._id)} variant="outline-warning">Editar</Button>
+                                            <Button onClick={() => this.handleDeleteProduct(product._id, this.index)} variant="outline-danger">Deletar</Button>
                                         </ProductItem>
                                     )
                                 })

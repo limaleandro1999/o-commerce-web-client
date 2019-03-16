@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Navbar from '../components/Navbar';
 import ProductItem from '../components/ProductItem';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 
 export default class ProductsListHome extends Component {
@@ -12,16 +13,18 @@ export default class ProductsListHome extends Component {
 
     componentWillMount(){
         let products = this.props.location.state.products;
-        console.log('monut', products)
         this.setState({ products: products });
     }
 
     UNSAFE_componentWillReceiveProps(){
         let products = this.props.location.state.products;
-        console.log('update', products)
         this.setState({ products: products });
     }
     
+    handleClickProduct = (product) => {
+        this.props.history.push({pathname: `/produto/${product._id}`, state: { product: product }});
+    }
+
     render() {
         return (
             <div>
@@ -36,7 +39,11 @@ export default class ProductsListHome extends Component {
                                 this.state.products.length <= 0 
                                 ? <h2>Nenhum produto encontrado</h2>
                                 : this.state.products.map((product, index) => {
-                                    return (<ProductItem key={index} index={index} handleDelete={this.handleDeleteProduct} handleEdit={this.handleEditProduct} product={product}/>)
+                                    return (
+                                        <ProductItem key={index} index={index} product={product}>
+                                            <Button onClick={() => this.handleClickProduct(product)} variant="outline-success">Confira!</Button>
+                                        </ProductItem>
+                                    )
                                 })
                             }
                         </Card.Body>

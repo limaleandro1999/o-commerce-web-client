@@ -8,10 +8,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
+import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import Login from '../screens/Login';
 
-import api from '../services/api'
+import api from '../services/api';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/navbar.css';
@@ -20,14 +21,27 @@ export default class MainNavbar extends Component {
   state = {
     search: '',
     profilePhoto: '',
+    countProducts: 0,
     modalVisibility: false
   };
 
-  componentDidMount(){
+  async getData(){
     const username = localStorage.getItem('@O-Commerce:name');
+    const isBuyer = localStorage.getItem('@O-Commerce:isBuyer');
+
+    if(isBuyer === 'false'){
+      return this.props.history.push('/dashboard');
+    }
+
     if(username){
       this.setState({ username: username });
+      let countProducts = await api.get('/cart/cartCount', {headers: {'Authorization': `Bearer ${localStorage.getItem('@O-Commerce:accessToken')}`}});
+      this.setState({ countProducts: countProducts.data.countProducts });
     }
+  }
+
+  async componentWillMount(){
+    await this.getData();
   }
 
   handleInputChange = e => {
@@ -35,17 +49,23 @@ export default class MainNavbar extends Component {
   };
 
   handleClickButton = () => {
-    api.get(`/products/list`, {
-      params: {
-        q: this.state.search
-      }
-    }).then(res => {
-      if(this.props.history.location.pathname === '/lista_produtos'){
-        this.props.history.push({pathname: '/lista_produtos', search: `?q=${this.state.search}`, state: {products: res.data} });
-      }else{
-        this.props.history.push('/lista_produtos', { products: res.data });
-      }
-    })
+    if(this.state.search.length > 0){
+      api.get(`/products/list`, {
+        params: {
+          q: this.state.search
+        }
+      }).then(res => {
+        if(this.props.history.location.pathname === '/lista_produtos'){
+          this.props.history.push({pathname: '/lista_produtos', search: `?q=${this.state.search}`, state: {products: res.data} });
+        }else{
+          this.props.history.push('/lista_produtos', { products: res.data });
+        }
+      })
+    }
+  };
+
+  handleClickCart = () => {
+    this.props.history.push(`/carrinho`);
   };
 
   handleClickHome = () => {
@@ -56,12 +76,21 @@ export default class MainNavbar extends Component {
     this.setState({ modalVisibility: !this.state.modalVisibility });
   };
 
+  handleAfterLogin = async () => {
+    const isBuyer = localStorage.getItem('@O-Commerce:isBuyer');
+
+    if(isBuyer){
+      await this.getData();
+    }
+  };
+
   render() {
     return (
       <>
         <Login 
           visibility={this.state.modalVisibility}
           handleShowModal={this.handleShowModal}
+          afterLogin={this.handleAfterLogin}
           history={this.props.history}
         />
         <Navbar bg="light" expand="lg" className="topnav">
@@ -77,9 +106,15 @@ export default class MainNavbar extends Component {
               </Form>
             </Nav>
             <Nav>
-              <Nav.Link>
-                <FontAwesomeIcon icon={faShoppingCart} size="lg"/>
-              </Nav.Link>
+              {
+                this.state.username 
+                ? <Nav.Link onClick={this.handleClickCart}>
+                    <FontAwesomeIcon icon={faShoppingCart} size="lg"/>
+                    <Badge pill variant="warning">{ this.state.countProducts }</Badge>
+                  </Nav.Link>
+                : <div/>
+              }
+              
               {
                 this.state.username 
                 ? <div className="loginText">

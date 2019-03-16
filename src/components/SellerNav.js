@@ -15,6 +15,13 @@ export default class SellerNav extends Component {
 
   componentDidMount(){
     const username = localStorage.getItem('@O-Commerce:name');
+
+    const isBuyer = localStorage.getItem('@O-Commerce:isBuyer');
+
+    if(isBuyer === 'true'){
+      return this.props.history.push('/');
+    }
+
     if(username){
       this.setState({ username: username });
     }
@@ -26,10 +33,6 @@ export default class SellerNav extends Component {
 
   handleClickSales = () => {
     this.props.history.push('/vendas');
-  };
-
-  handleClickStock = () => {
-    this.props.history.push('/estoque');
   };
 
   handleClickHome = () => {
@@ -49,10 +52,7 @@ export default class SellerNav extends Component {
                 <Nav.Link onClick={this.handleClickProducts}>
                     Produtos
                 </Nav.Link>
-                <Nav.Link onClick={this.handleClickStock}>
-                    Estoque
-                </Nav.Link>
-                <Nav.Link onClick={this.handleClickStock}>
+                <Nav.Link onClick={this.handleClickSales}>
                     Vendas
                 </Nav.Link>
             </Nav>

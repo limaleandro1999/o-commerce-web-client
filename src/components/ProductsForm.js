@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
+import Image from 'react-bootstrap/Image';
+import Row from 'react-bootstrap/Row';
 import api from '../services/api';
+import Container from 'react-bootstrap/Container';
 
 export default class ProductForm extends Component {
     state = {
         name: '',
         description: '',
+        imgUrl: '',
         price: 0
     }
 
@@ -16,7 +19,7 @@ export default class ProductForm extends Component {
             const responseProducts = await api.get(`/products/${this.props.productId}`, {headers: {'Authorization': `Bearer ${localStorage.getItem('@O-Commerce:accessToken')}`}});
             let product = responseProducts.data;
 
-            this.setState({ _id: product._id ,name: product.name, description: product.description, price: product.price });
+            this.setState({ _id: product._id ,name: product.name, description: product.description, price: product.price, imgUrl: product.imgUrl });
         }
     }
 
@@ -24,13 +27,24 @@ export default class ProductForm extends Component {
         this.setState({ [e.target.name]: e.target.value });
     };
 
-    handleSubmit = () => {
+    handleSubmit = async () => {
         this.props.handleSubmit(this.state);
     };
 
     render() {
         return (
             <Form>
+                <Form.Group>
+                    <Form.Label>Imagem do produto</Form.Label>
+                        <Container>
+                            <Row>                        
+                                <Image src={this.state.imgUrl} fluid />
+
+                                <Form.Control type="text" name="imgUrl" value={this.state.imgUrl} onChange={this.handleInputChange}/>
+                            </Row>
+                        </Container>
+                </Form.Group>
+
                 <Form.Group>
                     <Form.Label>Nome do produto</Form.Label>
                     <Form.Control type="text" name="name" value={this.state.name} onChange={this.handleInputChange}/>

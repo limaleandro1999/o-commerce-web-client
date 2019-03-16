@@ -30,6 +30,9 @@ export default class Login extends Component {
       localStorage.setItem('@O-Commerce:name', res.data.name);
       localStorage.setItem('@O-Commerce:isBuyer', res.data.isBuyer);
 
+      this.props.handleShowModal(); 
+      this.props.afterLogin();
+
       if(res.data.isBuyer){
         this.props.history.push('/');
       }else{
@@ -48,11 +51,15 @@ export default class Login extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Email" name="email" onChange={this.handleInputChange} value={this.state.email}/>
+              <Form.Group>
+                <Form.Label>Email</Form.Label>
+                <Form.Control type="email" placeholder="Email" name="email" onChange={this.handleInputChange} value={this.state.email}/>
+              </Form.Group>
               
-              <Form.Label>Senha</Form.Label>
-              <Form.Control type="password" placeholder="Senha" name="password" onChange={this.handleInputChange} value={this.state.password}/>
+              <Form.Group>
+                <Form.Label>Senha</Form.Label>
+                <Form.Control type="password" placeholder="Senha" name="password" onChange={this.handleInputChange} value={this.state.password}/>
+              </Form.Group>              
             </Form>
           </Modal.Body>
           <Modal.Footer>
